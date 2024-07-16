@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Yeni Ürün Ekle</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.isim.label }}
+            {{ form.isim(class="form-control") }}
+            {% for error in form.isim.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.aciklama.label }}
+            {{ form.aciklama(class="form-control") }}
+            {% for error in form.aciklama.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.fotograf.label }}
+            {{ form.fotograf(class="form-control") }}
+            {% for error in form.fotograf.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        {{ form.gonder(class="btn btn-primary") }}
+    </form>
+{% endblock %}

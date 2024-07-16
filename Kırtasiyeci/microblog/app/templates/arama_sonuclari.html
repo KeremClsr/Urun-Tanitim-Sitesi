@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Arama Sonuçları</h1>
+    {% if sonuclar %}
+        <div class="row">
+        {% for urun in sonuclar %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ urun.fotograf }}" class="card-img-top" alt="{{ urun.isim }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ urun.isim }}</h5>
+                        <p class="card-text">{{ urun.aciklama[:100] }}{% if urun.aciklama|length > 100 %}...{% endif %}</p>
+                        <a href="{{ url_for('urun_detay', urun_id=urun.id) }}" class="btn btn-primary">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>Arama sonucu bulunamadı.</p>
+    {% endif %}
+{% endblock %}

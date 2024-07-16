@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Ürünlerimiz</h1>
+    {% if current_user.is_authenticated and current_user.is_admin %}
+        <a href="{{ url_for('urun_ekle') }}" class="btn btn-primary mb-3">Yeni Ürün Ekle</a>
+    {% endif %}
+    <div class="row">
+    {% for urun in urunler %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    <img src="{{ urun.fotograf }}" class="card-img-top product-img" alt="{{ urun.isim }}">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ urun.isim }}</h5>
+                    <p class="card-text flex-grow-1">{{ urun.aciklama[:100] }}{% if urun.aciklama|length > 100 %}...{% endif %}</p>
+                    {% if urun.ortalama_puan() %}
+                        <p class="card-text">Ortalama Puan: {{ urun.ortalama_puan() }}/5</p>
+                    {% else %}
+                        <p class="card-text">Henüz puanlanmamış</p>
+                    {% endif %}
+                    <a href="{{ url_for('urun_detay', urun_id=urun.id) }}" class="btn btn-primary mt-auto">Detaylar</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

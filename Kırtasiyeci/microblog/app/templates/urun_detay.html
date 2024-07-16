@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ urun.isim }}</h1>
+    <img src="{{ urun.fotograf }}" alt="{{ urun.isim }}" class="img-fluid mb-3">
+    <p>{{ urun.aciklama }}</p>
+    
+    {% if urun.ortalama_puan() %}
+        <h3>Ortalama Puan: {{ urun.ortalama_puan() }}/5</h3>
+    {% else %}
+        <h3>Henüz puanlanmamış</h3>
+    {% endif %}
+
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <form action="{{ url_for('urun_sil', urun_id=urun.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')">Ürünü Sil</button>
+    </form>
+{% endif %}
+
+    <h2>İncelemeler</h2>
+    {% if urun.incelemeler.all() %}
+        {% for inceleme in urun.incelemeler %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ inceleme.yazar.kullanici_adi }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Puan: {{ inceleme.puan }}/5</h6>
+                    <p class="card-text">{{ inceleme.icerik }}</p>
+                    <p class="card-text"><small class="text-muted">{{ inceleme.tarih.strftime('%Y-%m-%d %H:%M') }}</small></p>
+                    {% if current_user == inceleme.yazar or current_user.is_admin %}
+                    <form action="{{ url_for('inceleme_sil', inceleme_id=inceleme.id) }}" method="post" style="display: inline;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu incelemeyi silmek istediğinizden emin misiniz?')">İncelemeyi Sil</button>
+                    </form>
+                {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Bu ürün için henüz inceleme yok.</p>
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
+        {% if not current_user.incelemeler.filter_by(urun_id=urun.id).first() %}
+            <a href="{{ url_for('inceleme_ekle', urun_id=urun.id) }}" class="btn btn-primary">İnceleme Ekle</a>
+        {% else %}
+            <p class="text-muted">Bu ürün için zaten bir inceleme yazmışsınız.</p>
+        {% endif %}
+    {% else %}
+        <p>İnceleme eklemek için <a href="{{ url_for('giris') }}">giriş yapın</a> veya <a href="{{ url_for('kayit') }}">kayıt olun</a>.</p>
+    {% endif %}
+{% endblock %}

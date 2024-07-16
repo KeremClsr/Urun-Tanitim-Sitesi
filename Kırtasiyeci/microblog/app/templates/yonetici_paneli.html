@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Yönetici Paneli</h1>
+
+    <h2>Ürünler</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>İsim</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for urun in urunler %}
+            <tr>
+                <td>{{ urun.id }}</td>
+                <td>{{ urun.isim }}</td>
+                <td>
+                    <form action="{{ url_for('urun_sil', urun_id=urun.id) }}" method="post" style="display: inline;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')">Sil</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>İncelemeler</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Kullanıcı</th>
+                <th>Ürün</th>
+                <th>Puan</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inceleme in incelemeler %}
+            <tr>
+                <td>{{ inceleme.id }}</td>
+                <td>{{ inceleme.yazar.kullanici_adi }}</td>
+                <td>{{ inceleme.urun.isim }}</td>
+                <td>{{ inceleme.puan }}</td>
+                <td>
+                    <form action="{{ url_for('inceleme_sil', inceleme_id=inceleme.id) }}" method="post" style="display: inline;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu incelemeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')">Sil</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Kullanıcılar</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kullanıcı Adı</th>
+            <th>Email</th>
+            <th>Yönetici</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kullanici in kullanicilar %}
+        <tr>
+            <td>{{ kullanici.id }}</td>
+            <td>{{ kullanici.kullanici_adi }}</td>
+            <td>{{ kullanici.email }}</td>
+            <td>{% if kullanici.is_admin %}Evet{% else %}Hayır{% endif %}</td>
+            <td>
+                {% if kullanici.is_admin and kullanici != current_user %}
+                <form action="{{ url_for('kullanici_yoneticilikten_cikar', kullanici_id=kullanici.id) }}" method="post" style="display: inline;">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Bu kullanıcıyı yöneticilikten çıkarmak istediğinizden emin misiniz?')">Yöneticilikten Çıkar</button>
+                </form>
+                {% elif not kullanici.is_admin %}
+                <form action="{{ url_for('kullanici_yonetici_yap', kullanici_id=kullanici.id) }}" method="post" style="display: inline;">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Bu kullanıcıyı yönetici yapmak istediğinizden emin misiniz?')">Yönetici Yap</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

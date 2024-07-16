@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ current_user.kullanici_adi }} Profili</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <p>Email: {{ current_user.email }}</p>
+    <a href="{{ url_for('profil_guncelle') }}" class="btn btn-primary">Profili Güncelle</a>
+
+    <h2>Yaptığım İncelemeler</h2>
+    {% if incelemeler %}
+        {% for inceleme in incelemeler %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ inceleme.urun.isim }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Puan: {{ inceleme.puan }}/5</h6>
+                    <p class="card-text">{{ inceleme.icerik }}</p>
+                    <p class="card-text"><small class="text-muted">{{ inceleme.tarih.strftime('%Y-%m-%d %H:%M') }}</small></p>
+                    <a href="{{ url_for('urun_detay', urun_id=inceleme.urun.id) }}" class="btn btn-primary btn-sm">Ürüne Git</a>
+                    <form action="{{ url_for('inceleme_sil', inceleme_id=inceleme.id) }}" method="post" style="display: inline;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu incelemeyi silmek istediğinizden emin misiniz?')">İncelemeyi Sil</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Henüz bir inceleme yapmamışsınız.</p>
+    {% endif %}
+{% endblock %}

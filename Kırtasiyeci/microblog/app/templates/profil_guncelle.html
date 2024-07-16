@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Profil Güncelle</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=64) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.eski_parola.label }}<br>
+            {{ form.eski_parola(size=32) }}<br>
+            {% for error in form.eski_parola.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.yeni_parola.label }}<br>
+            {{ form.yeni_parola(size=32) }}<br>
+            {% for error in form.yeni_parola.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.yeni_parola2.label }}<br>
+            {{ form.yeni_parola2(size=32) }}<br>
+            {% for error in form.yeni_parola2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.gonder() }}</p>
+    </form>
+{% endblock %}

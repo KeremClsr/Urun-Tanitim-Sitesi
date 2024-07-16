@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ urun.isim }} için İnceleme Ekle</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.icerik.label }}
+            {{ form.icerik(class="form-control") }}
+            {% for error in form.icerik.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.puan.label }}
+            {{ form.puan(class="form-control") }}
+            {% for error in form.puan.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        {{ form.gonder(class="btn btn-primary") }}
+    </form>
+{% endblock %}

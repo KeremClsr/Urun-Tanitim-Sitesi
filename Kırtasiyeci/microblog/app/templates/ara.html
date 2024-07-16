@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Ürün Ara</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.arama.label }}
+            {{ form.arama(size=32, class="form-control") }}
+        </div>
+        {{ form.gonder(class="btn btn-primary") }}
+    </form>
+{% endblock %}
